@@ -234,7 +234,7 @@ class RegisterController extends Controller {
 	 * @NoCSRFRequired
 	 * @PublicPage
 	 */
-	public function showUserForm(string $secret, string $token, string $loginname = '', string $fullname = '', string $phone = '', string $password = '', string $message = ''): TemplateResponse {
+	public function showUserForm(string $secret, string $token, string $loginname = '', string $fullname = '', string $phone = '', string $address = '', string $password = '', string $message = ''): TemplateResponse {
 		try {
 			$registration = $this->validateSecretAndToken($secret, $token);
 		} catch (RegistrationException $e) {
@@ -255,6 +255,9 @@ class RegisterController extends Controller {
 		$this->initialState->provideInitialState('phone', $phone);
 		$this->initialState->provideInitialState('showPhone', $this->config->getAppValue('registration', 'show_phone', 'no') === 'yes');
 		$this->initialState->provideInitialState('enforcePhone', $this->config->getAppValue('registration', 'enforce_phone', 'no') === 'yes');
+		$this->initialState->provideInitialState('address', $address);
+		$this->initialState->provideInitialState('showAddress', $this->config->getAppValue('registration', 'show_address', 'no') === 'yes');
+		$this->initialState->provideInitialState('enforceAddress', $this->config->getAppValue('registration', 'enforce_address', 'no') === 'yes');
 		$this->initialState->provideInitialState('message', $message);
 		$this->initialState->provideInitialState('password', $password);
 		$this->initialState->provideInitialState('additionalHint', $additional_hint);
@@ -281,10 +284,11 @@ class RegisterController extends Controller {
 	 * @param string $loginname
 	 * @param string $fullname
 	 * @param string $phone
+	 * @param string $address
 	 * @param string $password
 	 * @return RedirectResponse|TemplateResponse
 	 */
-	public function submitUserForm(string $secret, string $token, string $loginname, string $fullname, string $phone, string $password): Response {
+	public function submitUserForm(string $secret, string $token, string $loginname, string $fullname, string $phone, string $address, string $password): Response {
 		try {
 			$registration = $this->validateSecretAndToken($secret, $token);
 		} catch (RegistrationException $e) {
@@ -299,15 +303,15 @@ class RegisterController extends Controller {
 		$this->eventDispatcher->dispatchTyped($validateFormEvent);
 
 		if (!empty($validateFormEvent->getErrors())) {
-			return $this->showUserForm($secret, $token, $loginname, $fullname, $phone, $password, implode(' ', $validateFormEvent->getErrors()));
+			return $this->showUserForm($secret, $token, $loginname, $fullname, $phone, $address, $password, implode(' ', $validateFormEvent->getErrors()));
 		}
 
 		try {
-			$user = $this->registrationService->createAccount($registration, $loginname, $fullname, $phone, $password);
+			$user = $this->registrationService->createAccount($registration, $loginname, $fullname, $phone, $address, $password);
 		} catch (HintException $exception) {
-			return $this->showUserForm($secret, $token, $loginname, $fullname, $phone, $password, $exception->getHint());
+			return $this->showUserForm($secret, $token, $loginname, $fullname, $phone, $address, $password, $exception->getHint());
 		} catch (Exception $exception) {
-			return $this->showUserForm($secret, $token, $loginname, $fullname, $phone, $password, $exception->getMessage());
+			return $this->showUserForm($secret, $token, $loginname, $fullname, $phone, $address, $password, $exception->getMessage());
 		}
 
 		// Delete registration

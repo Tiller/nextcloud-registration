@@ -147,6 +147,22 @@
 				@update:checked="saveData">
 				{{ t('registration', 'Enforce phone field') }}
 			</NcCheckboxRadioSwitch>
+
+			<NcCheckboxRadioSwitch :checked.sync="showAddress"
+				type="switch"
+				:disabled="loading"
+				@update:checked="saveData">
+				{{ t('registration', 'Show address field') }}
+			</NcCheckboxRadioSwitch>
+
+			<NcCheckboxRadioSwitch v-if="showAddress"
+				class="indent"
+				:checked.sync="enforceAddress"
+				type="switch"
+				:disabled="loading"
+				@update:checked="saveData">
+				{{ t('registration', 'Enforce address field') }}
+			</NcCheckboxRadioSwitch>
 		</NcSettingsSection>
 
 		<NcSettingsSection :title="t('registration', 'User instructions')"
@@ -217,6 +233,8 @@ export default {
 			canShowPhone: false,
 			showPhone: false,
 			enforcePhone: false,
+			showAddress: false,
+			enforceAddress: false,
 			additionalHint: '',
 			emailVerificationHint: '',
 		}
@@ -254,6 +272,8 @@ export default {
 		this.canShowPhone = loadState('registration', 'can_show_phone')
 		this.showPhone = loadState('registration', 'show_phone')
 		this.enforcePhone = loadState('registration', 'enforce_phone')
+		this.showAddress = loadState('registration', 'show_address')
+		this.enforceAddress = loadState('registration', 'enforce_address')
 		this.additionalHint = loadState('registration', 'additional_hint')
 		this.emailVerificationHint = loadState('registration', 'email_verification_hint')
 
@@ -285,6 +305,8 @@ export default {
 					enforce_fullname: this.enforceFullname,
 					show_phone: this.showPhone,
 					enforce_phone: this.enforcePhone,
+					show_address: this.showAddress,
+					enforce_address: this.enforceAddress,
 					additional_hint: this.additionalHint,
 					email_verification_hint: this.emailVerificationHint,
 				})

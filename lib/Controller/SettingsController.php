@@ -67,6 +67,8 @@ class SettingsController extends Controller {
 		?bool $enforce_fullname,
 		?bool $show_phone,
 		?bool $enforce_phone,
+		?bool $show_address,
+		?bool $enforce_address,
 		?bool $domains_is_blocklist,
 		?bool $show_domains,
 		?bool $disable_email_verification) {
@@ -112,6 +114,8 @@ class SettingsController extends Controller {
 		$this->config->setAppValue($this->appName, 'enforce_fullname', $enforce_fullname ? 'yes' : 'no');
 		$this->config->setAppValue($this->appName, 'show_phone', $show_phone ? 'yes' : 'no');
 		$this->config->setAppValue($this->appName, 'enforce_phone', $enforce_phone ? 'yes' : 'no');
+		$this->config->setAppValue($this->appName, 'show_address', $show_address ? 'yes' : 'no');
+		$this->config->setAppValue($this->appName, 'enforce_address', $enforce_address ? 'yes' : 'no');
 		$this->config->setAppValue($this->appName, 'domains_is_blocklist', $domains_is_blocklist ? 'yes' : 'no');
 		$this->config->setAppValue($this->appName, 'show_domains', $show_domains ? 'yes' : 'no');
 		$this->config->setAppValue($this->appName, 'disable_email_verification', $disable_email_verification ? 'yes' : 'no');

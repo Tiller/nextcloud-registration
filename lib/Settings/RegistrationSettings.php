@@ -123,6 +123,14 @@ class RegistrationSettings implements ISettings {
 			'enforce_phone',
 			$this->config->getAppValue($this->appName, 'enforce_phone', 'no') === 'yes'
 		);
+		$this->initialState->provideInitialState(
+			'show_address',
+			$this->config->getAppValue($this->appName, 'show_address', 'no') === 'yes'
+		);
+		$this->initialState->provideInitialState(
+			'enforce_address',
+			$this->config->getAppValue($this->appName, 'enforce_address', 'no') === 'yes'
+		);
 
 		$this->initialState->provideInitialState(
 			'additional_hint',

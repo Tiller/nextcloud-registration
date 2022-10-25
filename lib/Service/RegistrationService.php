@@ -283,6 +283,14 @@ class RegistrationService {
 	}
 
 	/**
+	 * @param string $address
+	 * @throws RegistrationException
+	 */
+	public function validateAddress(string $address): void {
+		// do nothing
+	}
+
+	/**
 	 * check if email domain is allowed
 	 *
 	 * @param string $email
@@ -335,11 +343,12 @@ class RegistrationService {
 	 * @param string|null $loginName
 	 * @param string|null $fullName
 	 * @param string|null $phone
+	 * @param string|null $address
 	 * @param string|null $password
 	 * @return IUser
 	 * @throws RegistrationException|InvalidArgumentException
 	 */
-	public function createAccount(Registration $registration, ?string $loginName = null, ?string $fullName = null, ?string $phone = null, ?string $password = null): IUser {
+	public function createAccount(Registration $registration, ?string $loginName = null, ?string $fullName = null, ?string $phone = null, ?string $address = null, ?string $password = null): IUser {
 		if ($loginName === null) {
 			$loginName = $registration->getUsername();
 		}
@@ -403,6 +412,21 @@ class RegistrationService {
 			$account->setProperty(
 				IAccountManager::PROPERTY_PHONE,
 				$phone,
+				$property->getScope(),
+				IAccountManager::NOT_VERIFIED
+			);
+			$this->accountManager->updateAccount($account);
+		}
+
+		// Set address in account data
+		if (method_exists($this->accountManager, 'updateAccount')
+			&& $address
+			&& $this->config->getAppValue('registration', 'show_address', 'no') === 'yes') {
+			$account = $this->accountManager->getAccount($user);
+			$property = $account->getProperty(IAccountManager::PROPERTY_ADDRESS);
+			$account->setProperty(
+				IAccountManager::PROPERTY_ADDRESS,
+				$address,
 				$property->getScope(),
 				IAccountManager::NOT_VERIFIED
 			);

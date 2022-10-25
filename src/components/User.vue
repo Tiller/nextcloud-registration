@@ -87,6 +87,20 @@
 					name="phone"
 					value="">
 
+				<NcTextField v-if="showAddress"
+					:value.sync="address"
+					type="text"
+					name="address"
+					:label="t('registration', 'Appartment')"
+					:label-visible="true"
+					:required="enforceAddress">
+					<Address :size="20" class="input__icon" />
+				</NcTextField>
+				<input v-else
+					type="hidden"
+					name="address"
+					value="">
+
 				<NcPasswordField :value.sync="password"
 					:label="t('registration', 'Password')"
 					:label-visible="true"
@@ -117,6 +131,7 @@ import { loadState } from '@nextcloud/initial-state'
 import Email from 'vue-material-design-icons/Email.vue'
 import Lock from 'vue-material-design-icons/Lock.vue'
 import Phone from 'vue-material-design-icons/Phone.vue'
+import Address from 'vue-material-design-icons/LocationEnter.vue'
 import Account from 'vue-material-design-icons/Account.vue'
 import Key from 'vue-material-design-icons/Key.vue'
 
@@ -131,6 +146,7 @@ export default {
 		Email,
 		Lock,
 		Phone,
+		Address,
 		Account,
 		Key,
 	},
@@ -147,6 +163,9 @@ export default {
 			phone: loadState('registration', 'phone'),
 			showPhone: loadState('registration', 'showPhone'),
 			enforcePhone: loadState('registration', 'enforcePhone'),
+			address: loadState('registration', 'address'),
+			showAddress: loadState('registration', 'showAddress'),
+			enforceAddress: loadState('registration', 'enforceAddress'),
 			message: loadState('registration', 'message'),
 			password: loadState('registration', 'password'),
 			additionalHint: loadState('registration', 'additionalHint'),
