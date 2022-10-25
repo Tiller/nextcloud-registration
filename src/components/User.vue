@@ -91,7 +91,7 @@
 					:value.sync="address"
 					type="text"
 					name="address"
-					:label="t('registration', 'Appartment')"
+					:label="t('registration', 'Apartment Number')"
 					:label-visible="true"
 					:required="enforceAddress">
 					<Address :size="20" class="input__icon" />
@@ -100,6 +100,14 @@
 					type="hidden"
 					name="address"
 					value="">
+
+				<label>Profile</label>
+				<select name="profile" id="profileSelector" v-model="profile">
+					<option disabled value="">{{ t('registration', 'Pick a profile') }}</option>
+					<option value="owner" >{{ t('registration', 'Owner') }}</option>
+					<option value="tenant">{{ t('registration', 'Tenant') }}</option>
+					<option value="syndic">{{ t('registration', 'Property Management Council') }}</option>
+				</select>
 
 				<NcPasswordField :value.sync="password"
 					:label="t('registration', 'Password')"
@@ -164,6 +172,7 @@ export default {
 			showPhone: loadState('registration', 'showPhone'),
 			enforcePhone: loadState('registration', 'enforcePhone'),
 			address: loadState('registration', 'address'),
+			profile: loadState('registration', 'profile'),
 			showAddress: loadState('registration', 'showAddress'),
 			enforceAddress: loadState('registration', 'enforceAddress'),
 			message: loadState('registration', 'message'),
@@ -194,6 +203,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#profileSelector {
+	padding: 0 !important;
+}
+
 .guest-box {
 	text-align: left;
 }

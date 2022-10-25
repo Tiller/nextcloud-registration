@@ -344,11 +344,12 @@ class RegistrationService {
 	 * @param string|null $fullName
 	 * @param string|null $phone
 	 * @param string|null $address
+	 * @param string|null $profile
 	 * @param string|null $password
 	 * @return IUser
 	 * @throws RegistrationException|InvalidArgumentException
 	 */
-	public function createAccount(Registration $registration, ?string $loginName = null, ?string $fullName = null, ?string $phone = null, ?string $address = null, ?string $password = null): IUser {
+	public function createAccount(Registration $registration, ?string $loginName = null, ?string $fullName = null, ?string $phone = null, ?string $address = null, ?string $profile = null, ?string $password = null): IUser {
 		if ($loginName === null) {
 			$loginName = $registration->getUsername();
 		}
@@ -433,21 +434,43 @@ class RegistrationService {
 			$this->accountManager->updateAccount($account);
 		}
 
+		$groupNames = array();
+
+		if ($profile) {
+			switch ($profile) {
+				case 'tenant':
+					array_push($groupNames, 'Locataires');
+					break;
+				case 'syndic';
+					array_push($groupNames, 'Conseil Syndical', 'Propriétaires');
+					break;
+				case 'owner':
+					array_push($groupNames, 'Propriétaires');
+					break;
+				default:
+					throw new RegistrationException($this->l10n->t('Unable to create user, profile has not been selected.'));
+			}
+		}
+
 		// Add user to group
 		$registeredUserGroup = $this->config->getAppValue($this->appName, 'registered_user_group', 'none');
 		if ($registeredUserGroup !== 'none') {
-			$group = $this->groupManager->get($registeredUserGroup);
+			array_push($groupNames, $registeredUserGroup);
+		}
+
+		$groupId = '';
+
+		foreach ($groupNames as &$groupName) {
+			$group = $this->groupManager->get($groupName);
 			if ($group === null) {
 				// This might happen if $registered_user_group is deleted after setting the value
 				// Here I choose to log error instead of stopping the user to register
-				$this->logger->error("You specified newly registered users be added to '$registeredUserGroup' group, but it does not exist.");
+				$this->logger->error("You specified newly registered users be added to '$groupName' group, but it does not exist.");
 				$groupId = '';
 			} else {
 				$group->addUser($user);
 				$groupId = $group->getGID();
 			}
-		} else {
-			$groupId = '';
 		}
 
 		// disable user if this is requested by config

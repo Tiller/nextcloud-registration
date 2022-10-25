@@ -1,6 +1,11 @@
 OC.L10N.register(
     "registration",
     {
+    "Apartment Number": "Numéro d'appartement",
+    "Select a profile": "Choisissez un profile",
+    "Owner": "Propriétaire",
+    "Tenant": "Locataire",
+    "Property Management Council": "Conseil syndical",
     "A problem occurred sending email, please contact your administrator." : "Un problème est survenu lors de l'envoi de l'e-mail, veuillez contacter votre administrateur.",
     "The entered verification code is wrong" : "Le code de vérification saisi est erroné",
     "The verification failed." : "La vérification a échoué.",
