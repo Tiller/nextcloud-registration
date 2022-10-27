@@ -23,6 +23,15 @@
 	<div class="guest-box">
 		<form action="" method="post">
 			<fieldset>
+				<NcNoteCard type="success">
+					<p style="text-align: center;">
+						Un message vous a été envoyé contenant un code à remplir ci-dessous. Merci de vérifier vos emails.<br/>
+						<br/>
+						<strong>ATTENTION !</strong>
+						Vérifiez bien vos courriers indésirable, surtout si vous utilisez OUTLOOK / HOTMAIL. Marquez le courrier comme 'légitime' et autorisez 'no-reply@34malclabel.fr' à vous envoyer des emails.<br/><a href="https://stuff.stooit.com/d/1/635a53254685b/outlook-spam.png" target="_blank">Cliquez ici pour voir comment faire</a>
+					</p>
+				</NcNoteCard>
+
 				<NcNoteCard v-if="message !== ''" type="error">
 					{{ message }}
 				</NcNoteCard>
